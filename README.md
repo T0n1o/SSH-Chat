@@ -1,2 +1,2 @@
 # SSH-Chat
-A simple Python project to build an SSH-based chat.
+A Simple Python SSH-Based Chat Project.

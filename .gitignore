@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+host_key
+known_hosts
+dist/
+build/
+*.spec
+
+# IDE
+.idea/
+*.iml
+

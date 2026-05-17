@@ -1,15 +1,28 @@
-﻿# SSH-Chat (Python, via SSH)
+﻿# SSH-Chat (Python, over SSH)
 
-Chat em “sala única” usando o **protocolo SSH**: você roda um servidor SSH em Python e os usuários conectam com um cliente SSH normal (ex.: `ssh`). Também inclui um cliente GUI (Tkinter) e uma forma de empacotar em `.exe` no Windows.
+Single-room chat over the **SSH protocol**: you run an SSH chat server in Python and users connect either with a regular SSH client (e.g. `ssh`) or with the included GUI client (Tkinter).
 
-> Nota: exemplo educacional (não “hardened” para produção).
+> Educational project (not hardened for production).
 
-## Requisitos
+## Features
 
-- Python 3.10+
-- Dependências: `paramiko`
+- One shared room (broadcast to everyone)
+- Nicknames (auto-unique)
+- Commands:
+  - `/help` show help
+  - `/who` list online users
+  - `/quit` leave
+- GUI client (Tkinter)
+- Windows-friendly packaging (prebuilt `.exe` via GitHub Releases)
 
-Instalar (Windows PowerShell):
+## Quick start (GUI)
+
+1) Start the host app on the server PC
+2) Open the UI app on any PC and connect to the host IP/port
+
+## Optional: run from source (terminal)
+
+### Install
 
 ```powershell
 python -m venv .venv
@@ -17,78 +30,29 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Rodar o servidor (terminal)
+### Host the server
 
 ```powershell
 python -m ssh_chat.server --host 0.0.0.0 --port 2222 --user chat --password chat123
 ```
 
-Na primeira execução, o servidor cria automaticamente uma **host key** em `./host_key`.
-
-## Conectar com SSH
+### Connect with a regular SSH client
 
 ```powershell
-ssh chat@localhost -p 2222
+ssh chat@<HOST_IP> -p 2222
 ```
 
-- Ao entrar, escolha um nickname.
-- Comandos:
-  - `/help` ajuda
-  - `/who` lista usuários
-  - `/quit` sai
-
-## Cliente Python (opcional)
+### GUI client (Tkinter)
 
 ```powershell
-python -m ssh_chat.client --host localhost --port 2222 --user chat --password chat123
+python -m ssh_chat.gui_client --host <HOST_IP> --port 2222 --user chat --password chat123
 ```
 
-## Cliente com interface gráfica (GUI)
+## Windows `.exe`
 
-```powershell
-python -m ssh_chat.gui_client --host localhost --port 2222 --user chat --password chat123
-```
+This repo does **not** store `.exe` files in Git (they are large and change often). Instead, prebuilt executables are published in **GitHub Releases**.
 
-## Rodar via Docker (opcional)
+- `ssh-chat-host.exe` (server/host)
+- `ssh-chat-ui.exe` (GUI client)
 
-### Com Docker Compose
-
-```bash
-docker compose up --build
-```
-
-Depois conecte:
-
-```bash
-ssh chat@localhost -p 2222
-```
-
-### Com `docker run`
-
-```bash
-docker build -t ssh-chat .
-docker run --rm -p 2222:2222 -e SSH_CHAT_PASSWORD=chat123 -v "%cd%\\host_key:/app/host_key" ssh-chat
-```
-
-## Gerar `.exe` (Windows)
-
-Gera 2 executáveis:
-- `ssh-chat-host.exe` (servidor/host, com console e logs)
-- `ssh-chat-ui.exe` (cliente GUI, sem console)
-
-No PowerShell dentro da pasta do projeto:
-
-```powershell
-.\build_exe.ps1
-```
-
-Saída:
-
-```text
-.\dist\ssh-chat-host.exe
-.\dist\ssh-chat-ui.exe
-```
-
-Uso:
-- Abra `dist\ssh-chat-host.exe` (vai pedir uma senha e mostrar logs).
-- Em qualquer PC da rede, abra `dist\ssh-chat-ui.exe` e conecte no IP do servidor (porta 2222).
+Open the latest Release on GitHub and download them from the Assets section.
